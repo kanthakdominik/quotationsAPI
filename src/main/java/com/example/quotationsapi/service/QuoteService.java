@@ -1,6 +1,5 @@
 package com.example.quotationsapi.service;
 
-import com.example.quotationsapi.dto.AuthorDto;
 import com.example.quotationsapi.dto.QuoteDto;
 import com.example.quotationsapi.exception.ResourceNotFoundException;
 import com.example.quotationsapi.model.Author;
@@ -28,7 +27,7 @@ public class QuoteService {
 
     public QuoteDto getQuoteById(Long id) {
         Quote quote = quoteRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Quote with id = " + id + " not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Quote with id = " + id + " not found."));
         return new QuoteDto(quote);
     }
 
@@ -63,11 +62,10 @@ public class QuoteService {
         quoteRepository.delete(deletedQuote);
     }
 
-    public void deleteAllQuotesByAuthor(AuthorDto authorDto) {
-        List<Quote> deletedQuotes = quoteRepository.findAllByAuthors(authorDto.getName(), authorDto.getSurname());
+    public void deleteAllQuotesByAuthor(String name, String surname) {
+        List<Quote> deletedQuotes = quoteRepository.findAllByAuthors(name, surname);
         if (deletedQuotes.isEmpty()) {
-            throw new ResourceNotFoundException("Not deleted! Quotes with author " + authorDto.getName() +
-                    " " + authorDto.getSurname() + " not found.");
+            throw new ResourceNotFoundException("Not deleted! Quotes with author: " + name + " " + surname + " not found.");
         }
         quoteRepository.deleteAll(deletedQuotes);
     }

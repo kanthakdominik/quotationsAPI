@@ -1,6 +1,5 @@
 package com.example.quotationsapi.controller;
 
-import com.example.quotationsapi.dto.AuthorDto;
 import com.example.quotationsapi.dto.QuoteDto;
 import com.example.quotationsapi.model.Quote;
 import com.example.quotationsapi.service.QuoteService;
@@ -13,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
@@ -53,14 +53,14 @@ public class QuoteController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteQuote(@PathVariable(name = "id") Long id) {
+    public ResponseEntity<String> deleteQuote(@PathVariable(name = "id") Long id) {
         quoteService.deleteQuote(id);
         return ResponseEntity.ok("Quote deleted");
     }
 
-    @PostMapping("deleteByAuthor")
-    public ResponseEntity<?> deleteAllQuotesByAuthor(@RequestBody @Valid AuthorDto authorDto) {
-        quoteService.deleteAllQuotesByAuthor(authorDto);
-        return ResponseEntity.ok("Quotes for author " + authorDto.getName() + " " + authorDto.getSurname() + " deleted");
+    @DeleteMapping("/author")
+    public ResponseEntity<String> deleteAllQuotesByAuthor(@RequestParam("name") String name, @RequestParam("surname") String surname) {
+        quoteService.deleteAllQuotesByAuthor(name, surname);
+        return ResponseEntity.ok("Quotes for author: " + name + " " + surname + " deleted");
     }
 }
